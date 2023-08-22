@@ -1,0 +1,39 @@
+{
+  "name": "cv-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.8.1",
+    "@types/node": "20.5.0",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "apollo-link-context": "^1.0.20",
+    "apollo-link-rest": "^0.9.0",
+    "eslint": "^8.47.0",
+    "eslint-config-next": "13.4.16",
+    "graphql": "^16.8.0",
+    "next": "13.4.16",
+    "qs": "^6.11.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "autoprefixer": "^10.4.15",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.27",
+    "prettier": "^3.0.2",
+    "tailwindcss": "^3.3.3"
+  }
+}
