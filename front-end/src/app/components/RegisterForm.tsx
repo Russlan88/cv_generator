@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import ImageUpload from '../components/ImageUploader';
-import { useMutation } from '@apollo/client';
-import gql from 'graphql-tag';
+// import { useMutation } from '@apollo/client';
+// import gql from 'graphql-tag';
 
-const REGISTER_MUTATION = gql`
-  mutation Register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      id
-      username
-      email
-    }
-  }
-`;
+// const REGISTER_MUTATION = gql`
+//   mutation Register($username: String!, $email: String!, $password: String!) {
+//     register(username: $username, email: $email, password: $password) {
+//       id
+//       username
+//       email
+//     }
+//   }
+// `;
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ const RegisterForm: React.FC = () => {
     password: '',
   });
 
-  const [register] = useMutation(REGISTER_MUTATION);
+  // const [register] = useMutation(REGISTER_MUTATION);
 
   const handleChange = event => {
     const { name, value } = event.target;

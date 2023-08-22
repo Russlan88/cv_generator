@@ -34,9 +34,9 @@ const ImageUpload: React.FC = () => {
         )}
       </div>
 
-      <div class="svg-container">
+      <div className="svg-container">
         <InformationIco />
-        <p class="svg-text">
+        <p className="svg-text">
           L'immagine sarà inserita di default nel CV, ma potrai modificarla in
           seguito.
         </p>
