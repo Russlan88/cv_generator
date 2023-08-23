@@ -61,7 +61,13 @@ const RegisterForm: React.FC = () => {
   };
 
   return registrationSuccessful ? (
-    <div>Registrazione completata con successo!</div>
+    <>
+      <h1>La registrazione &egrave; andata a buon fine</h1>
+      <img
+        width="200"
+        src="https://cdn.dribbble.com/users/251873/screenshots/9289747/media/6ddd0b400fbab6d5fa72d73df503f330.gif"
+      />
+    </>
   ) : (
     <form onSubmit={handleSubmit}>
       <ImageUpload onFileChange={setUploadedFile} />
