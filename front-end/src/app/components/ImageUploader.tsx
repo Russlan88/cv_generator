@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import InformationIco from '../assets/Icons/Information';
 import './style.css';
 
-const ImageUpload: React.FC = () => {
+interface ImageUploadProps {
+  onFileChange?: (file: File | null) => void;
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = props => {
   const [image, setImage] = useState<string | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,6 +16,7 @@ const ImageUpload: React.FC = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result as string);
+        if (props.onFileChange) props.onFileChange(file);
       };
       reader.readAsDataURL(file);
     }

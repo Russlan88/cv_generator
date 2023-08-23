@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import ImageUpload from '../components/ImageUploader';
-// import { useMutation } from '@apollo/client';
-// import gql from 'graphql-tag';
-
-// const REGISTER_MUTATION = gql`
-//   mutation Register($username: String!, $email: String!, $password: String!) {
-//     register(username: $username, email: $email, password: $password) {
-//       id
-//       username
-//       email
-//     }
-//   }
-// `;
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +9,8 @@ const RegisterForm: React.FC = () => {
     password: '',
   });
 
-  // const [register] = useMutation(REGISTER_MUTATION);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -29,17 +19,52 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
+    console.log('Inizio del submit...');
+
     try {
-      const { data } = await register({ variables: formData });
-      console.log('Registration Success:', data);
+      const dataToSend = new FormData();
+
+      if (uploadedFile) {
+        console.log('Aggiungo il file...');
+        dataToSend.append('profileImage', uploadedFile);
+      }
+
+      dataToSend.append('username', formData.username);
+      dataToSend.append('email', formData.email);
+      dataToSend.append('password', formData.password);
+
+      // Log per vedere il contenuto di FormData
+      for (var pair of dataToSend.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+      }
+
+      const response = await axios.post(
+        'http://localhost:4200/registration',
+        dataToSend,
+      );
+
+      if (response.data.message === 'Registrazione completata con successo') {
+        console.log(
+          'Upload e registrazione completati con successo!',
+          response.data,
+        );
+        setRegistrationSuccessful(true);
+      } else {
+        console.error(
+          "Errore durante l'upload o la registrazione:",
+          response.data.message,
+        );
+      }
     } catch (error) {
-      console.error('Registration Error:', error);
+      console.error('Error:', error);
     }
   };
 
-  return (
+  return registrationSuccessful ? (
+    <div>Registrazione completata con successo!</div>
+  ) : (
     <form onSubmit={handleSubmit}>
-      <ImageUpload />
+      <ImageUpload onFileChange={setUploadedFile} />
       <label htmlFor="username-id">Username</label>
       <input
         type="text"
