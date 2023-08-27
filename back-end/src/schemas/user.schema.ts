@@ -1,15 +1,15 @@
 import { Schema, Document } from 'mongoose';
 
-export type UserDocument = User & Document;
-
-export class User {
+export interface User {
   username: string;
-  password: string; // Nota: Utilizza sempre la crittografia prima di salvare le password!
+  password: string;
   email: string;
 }
 
+export interface UserDocument extends User, Document {}
+
 export const UserSchema = new Schema({
   username: { type: String, required: true },
-  password: { type: String, required: true }, // Ricorda di utilizzare la crittografia prima di salvare le password!
+  password: { type: String, required: true },
   email: { type: String, required: true },
 });

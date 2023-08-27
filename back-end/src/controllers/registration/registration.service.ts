@@ -8,11 +8,11 @@ import { User, UserDocument } from '../../schemas/user.schema'; // Assicurati ch
 
 @Injectable()
 export class RegistrationService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
   async register(file: Express.Multer.File, createUserDto: CreateUserDto) {
     // Hash della password
-    const saltRounds = 10;
+    const saltRounds = 9;
     createUserDto.password = await bcrypt.hash(
       createUserDto.password,
       saltRounds,
@@ -23,7 +23,11 @@ export class RegistrationService {
       const newUser = new this.userModel(createUserDto);
       await newUser.save();
     } catch (error) {
-      // Qui potresti voler gestire specifici errori del database, come gli indirizzi email duplicati
+      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+        throw new BadRequestException(
+          "L'indirizzo email è già stato registrato.",
+        );
+      }
       throw new BadRequestException('Errore durante la registrazione.');
     }
 
