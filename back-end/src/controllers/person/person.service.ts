@@ -91,4 +91,26 @@ export class PersonService {
     );
     return person.save();
   }
+
+  async findByEmail(email: string) {
+    const user = await this.personModel
+      .findOne({ email: email.toLowerCase() })
+      .exec();
+    console.log('Found user:', user);
+    return user;
+  }
+
+  // In PersonService
+  async findAllUsers(): Promise<Person[]> {
+    const users = await this.personModel.find().exec();
+    return users;
+  }
+
+  // async findByEmail(email: string) {
+  //   const user = await this.personModel
+  //     .findOne({ 'contatti.email': email.toLowerCase() })
+  //     .exec();
+  //   console.log('Found user:', user);
+  //   return user;
+  // }
 }

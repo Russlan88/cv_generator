@@ -17,6 +17,9 @@ export class Person {
   nome: string;
 
   @Column()
+  password: string;
+
+  @Column()
   cognome: string;
 
   @Column('text', { array: true })

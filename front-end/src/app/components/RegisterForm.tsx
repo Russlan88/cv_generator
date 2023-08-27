@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ImageUpload from '../components/ImageUploader';
+import Link from 'next/link';
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const RegisterForm: React.FC = () => {
 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -49,6 +51,7 @@ const RegisterForm: React.FC = () => {
           response.data,
         );
         setRegistrationSuccessful(true);
+        setErrorMessage(null);
       } else {
         console.error(
           "Errore durante l'upload o la registrazione:",
@@ -57,16 +60,22 @@ const RegisterForm: React.FC = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+      setErrorMessage(
+        "L'indirizzo email fornito è già in uso. Se hai dimenticato la password, puoi recuperarla. Altrimenti, utilizza un altro indirizzo email.",
+      );
     }
   };
 
   return registrationSuccessful ? (
     <>
-      <h1>La registrazione &egrave; andata a buon fine</h1>
+      <h2>La registrazione &egrave; andata a buon fine</h2>
       <img
         width="200"
         src="https://cdn.dribbble.com/users/251873/screenshots/9289747/media/6ddd0b400fbab6d5fa72d73df503f330.gif"
       />
+      <p>
+        Ora puoi effettuare il <Link href="/login">login</Link>
+      </p>
     </>
   ) : (
     <form onSubmit={handleSubmit}>
@@ -97,7 +106,7 @@ const RegisterForm: React.FC = () => {
         value={formData.password}
         onChange={handleChange}
       />
-
+      {errorMessage && <div className="error">{errorMessage}</div>}
       <button type="submit">Registrati</button>
     </form>
   );
