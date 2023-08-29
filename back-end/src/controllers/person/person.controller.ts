@@ -17,7 +17,7 @@ export class PersonController {
 
   @Get()
   async getAll(): Promise<Person[]> {
-    return this.personService.getUserDetails();
+    return this.personService.findAllUsers();
   }
 
   @Post()

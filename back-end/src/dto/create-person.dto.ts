@@ -1,14 +1,16 @@
 export class CreatePersonDto {
   nome: string;
   cognome: string;
-  contatti: {
-    telefono: string;
-    email: string;
-    indirizzo: string;
-  };
+  contatti: Contatti[];
   competenze: string[];
   descrizione: string;
   esperienze_lavorative: WorkExperience[];
+}
+
+export class Contatti {
+  telefono: string;
+  email: string;
+  indirizzo: string;
 }
 
 export class WorkExperience {

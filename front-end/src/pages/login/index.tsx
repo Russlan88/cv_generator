@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Assicurati di aver installato 'axios' se non l'hai già fatto
+import axios from 'axios';
+import { useRouter } from 'next/router'; // Importa useRouter
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const router = useRouter(); // Inizializza useRouter
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,16 +23,14 @@ const Login: React.FC = () => {
 
       if (response.data && response.data.email) {
         setIsLoggedIn(true);
+        console.log('Tentativo di reindirizzamento alla dashboard'); // Debugging
+        router.push('/dashboard'); // Usa router per reindirizzare
       } else {
         setErrorMessage('Errore durante il login');
       }
     } catch (error) {
       setErrorMessage('Errore durante il login');
     }
-  }
-
-  if (isLoggedIn) {
-    return <div>Benvenuto!</div>;
   }
 
   return (

@@ -9,6 +9,7 @@ import { Person, PersonSchema } from '../../schemas/person.schema';
     MongooseModule.forFeature([{ name: Person.name, schema: PersonSchema }]),
   ],
   providers: [PersonService],
+  controllers: [PersonController], // Aggiungi questa riga per registrare il controller
   exports: [PersonService], // Esporta il servizio
 })
 export class PersonModule {}
