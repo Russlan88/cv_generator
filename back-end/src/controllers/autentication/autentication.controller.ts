@@ -1,35 +1,32 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UnauthorizedException,
-  NotFoundException,
-} from '@nestjs/common';
-import { AutenticationService } from '../autentication/autentication.service';
-import { UserDocument } from '../../models/user/user.model';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { AutenticationService } from './autentication.service';
 import { LoginUserDto } from '../../dto/login-user.dto';
 
-@Controller('login')
+@Controller('auth')
 export class AutenticationController {
-  constructor(private readonly autenticationService: AutenticationService) {}
+  constructor(private readonly autenticationService: AutenticationService) {
+    console.log('Secret Key:', process.env.SECRET_KEY);
+  }
 
-  @Post('validateUser')
-  async validateUserByEmailAndPassword(
-    @Body() loginUserDto: LoginUserDto,
-  ): Promise<UserDocument> {
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() loginUserDto: LoginUserDto) {
     try {
+      // Validare l'utente
       const user = await this.autenticationService.validateByEmailAndPassword(
         loginUserDto,
       );
-      return user;
+
+      // Generare un JWT
+      const token = await this.autenticationService.generateJwt(user);
+
+      return {
+        message: 'Login successful',
+        token,
+      };
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException('User not found');
-      } else if (error instanceof UnauthorizedException) {
-        throw new UnauthorizedException('Invalid password');
-      } else {
-        throw new Error('An unknown error occurred');
-      }
+      // Gestire gli errori (ad esempio, loggare l'errore, inviare una risposta appropriata, ecc.)
+      throw error;
     }
   }
 }

@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument, UserModel } from '../../models/user/user.model';
 import { LoginUserDto } from '../../dto/login-user.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AutenticationService {
@@ -17,23 +18,16 @@ export class AutenticationService {
     @InjectModel('User') private readonly userModel: Model<UserDocument>,
     private personService: PersonService,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
-  // async login(user: any) {
-  //   const payload = { username: user.username, sub: user.userId };
-  //   return {
-  //     access_token: this.jwtService.sign(payload),
-  //   };
-  // }
+  // Metodo per generare un JWT una volta che l'utente è stato validato
+  async generateJwt(user: UserDocument): Promise<string> {
+    const payload = { username: user.email, sub: user._id };
+    return this.jwtService.sign(payload);
+  }
 
-  // async findByEmail(email: string): Promise<UserDocument> {
-  //   const user = await this.userModel.findOne({ email }).exec();
-  //   if (!user) {
-  //     throw new NotFoundException('User not found');
-  //   }
-  //   return user;
-  // }
-
+  // Metodo per validare un utente in base all'email e alla password
   async validateByEmailAndPassword(dto: LoginUserDto): Promise<UserDocument> {
     const user = await this.userModel.findOne({ email: dto.email }).exec();
 
