@@ -6,11 +6,12 @@ import { PassportModule } from '@nestjs/passport';
 import { MongooseModule } from '@nestjs/mongoose';
 import { userSchema } from '../../models/user/user.model';
 import { PersonModule } from '../person/person.module';
+
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: 'YOUR_SECRET',
+      secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '60m' },
     }),
     PersonModule,
