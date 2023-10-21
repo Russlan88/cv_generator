@@ -1,66 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import NewCv from '../../app/components/NewCv';
-import './style.css';
+import { useRouter } from 'next/router';
 
-const Dashboard: React.FC = () => {
-  const [people, setPeople] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState(true); // Aggiungi uno stato di caricamento
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    async function fetchPeople() {
-      try {
-        const response = await axios.get('http://localhost:4200/person');
-        setPeople(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Errore nel recupero degli utenti', error);
-      } finally {
-        setLoading(false);
-      }
+    // Simula una verifica asincrona del token
+    const token = localStorage.getItem('authToken');
+
+    if (token) {
+      // Simula la verifica del token
+      setIsAuthenticated(true); // Imposta come autenticato se il token è valido
     }
 
-    fetchPeople();
+    setIsLoading(false); // Imposta il caricamento come falso una volta che il controllo è completo
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, isLoading]);
+
+  if (isLoading) {
+    return <p>Loading...</p>; // Mostra un loader o un segnaposto durante il caricamento
+  }
+
+  if (!isAuthenticated) {
+    return null; // Non renderizzare nulla se non è autenticato e il caricamento è completo
   }
 
   return (
-    <>
-      <div>
-        <h1>La tua dashboard</h1>
-        <h2>Elenco degli utenti:</h2>
-        {people.map((person, index) => (
-          <div
-            key={index}
-            style={{
-              margin: '20px',
-              padding: '15px',
-              border: '1px solid #ccc',
-              maxWidth: '340px',
-            }}
-          >
-            <h3>
-              {person.name} {person.surname}
-            </h3>
-            <p>Età: {person.age}</p>
-
-            {/* Sezione contatti */}
-            <h4>Contatti:</h4>
-            <ul>
-              <li>Telefono: {person.contatti[0]?.telefono}</li>
-              <li>Email: {person.contatti[0]?.email}</li>
-              <li>Indirizzo: {person.contatti[0]?.indirizzo}</li>
-            </ul>
-
-            <button className="button">Modifica CV</button>
-          </div>
-        ))}
-      </div>
-      <NewCv />
-    </>
+    <div>
+      <h1>Dashboard</h1>
+      {/* Resto del tuo componente */}
+    </div>
   );
 };
 
