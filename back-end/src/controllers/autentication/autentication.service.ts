@@ -23,7 +23,11 @@ export class AutenticationService {
 
   // Metodo per generare un JWT una volta che l'utente è stato validato
   async generateJwt(user: UserDocument): Promise<string> {
-    const payload = { username: user.email, sub: user._id };
+    const payload = {
+      email: user.email,
+      sub: user._id,
+      username: user.username,
+    };
     return this.jwtService.sign(payload);
   }
 

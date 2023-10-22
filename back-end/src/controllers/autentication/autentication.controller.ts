@@ -23,6 +23,7 @@ export class AutenticationController {
       return {
         message: 'Login successful',
         token,
+        username: user.username,
       };
     } catch (error) {
       // Gestire gli errori (ad esempio, loggare l'errore, inviare una risposta appropriata, ecc.)

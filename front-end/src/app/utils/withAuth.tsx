@@ -8,13 +8,17 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const Router = useRouter();
 
+  const publicRoutes = ['/', '/about', '/contact']; // Aggiungi tutte le tue pagine pubbliche qui
+
   useEffect(() => {
     const token =
       typeof window !== 'undefined' ? localStorage.getItem('jwtToken') : null;
-    const secret = '4C826ceRu289';
+    const secret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
     if (!token || !secret) {
-      Router.replace('/login');
+      if (!publicRoutes.includes(Router.pathname)) {
+        Router.replace('/login');
+      }
       return;
     }
 
@@ -29,7 +33,9 @@ export const AuthProvider = ({ children }) => {
       })
       .catch(err => {
         console.error('JWT verification error:', err);
-        Router.replace('/login');
+        if (!publicRoutes.includes(Router.pathname)) {
+          Router.replace('/login');
+        }
       });
   }, []);
 

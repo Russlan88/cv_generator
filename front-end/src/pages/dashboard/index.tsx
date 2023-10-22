@@ -1,41 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import LogoutButton from '../../app/components/logout_btn/index.tsx';
+import './style.css';
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true); // Aggiungi uno stato di caricamento
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState('');
   const router = useRouter();
 
   useEffect(() => {
-    // Simula una verifica asincrona del token
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('jwtToken');
+    const storedUserName = localStorage.getItem('userName');
 
     if (token) {
-      // Simula la verifica del token
-      setIsAuthenticated(true); // Imposta come autenticato se il token è valido
+      setIsAuthenticated(true);
     }
 
-    setIsLoading(false); // Imposta il caricamento come falso una volta che il controllo è completo
-  }, []);
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
 
-  useEffect(() => {
+    setIsLoading(false);
+
+    // Dopo aver impostato lo stato, controlla se l'utente è autenticato
     if (!isAuthenticated && !isLoading) {
       router.push('/login');
     }
   }, [isAuthenticated, isLoading]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken');
+    router.push('/');
+  };
+
   if (isLoading) {
-    return <p>Loading...</p>; // Mostra un loader o un segnaposto durante il caricamento
+    return <p>Loading...</p>;
   }
 
   if (!isAuthenticated) {
-    return null; // Non renderizzare nulla se non è autenticato e il caricamento è completo
+    return null;
   }
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {/* Resto del tuo componente */}
+    <div className="innerHeader">
+      <h1>Benvenuto nella tua Dashboard, {userName}!</h1>
+      <LogoutButton onLogout={handleLogout} />
     </div>
   );
 };

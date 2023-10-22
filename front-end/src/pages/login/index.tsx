@@ -9,17 +9,6 @@ const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
-  useEffect(() => {
-    const handleRouteChange = url => {
-      console.log('Sta per cambiare la route:', url);
-    };
-
-    router.events.on('routeChangeStart', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
-    };
-  }, []);
-
   const login = async () => {
     try {
       const response = await axios.post('http://localhost:4200/auth/login', {
@@ -28,14 +17,14 @@ const Login: React.FC = () => {
       });
 
       if (response.data.message === 'Login successful') {
-        localStorage.setItem('jwtToken', response.data.token); // Removed await
-        console.log('Token impostato, reindirizzamento alla dashboard...');
+        localStorage.setItem('jwtToken', response.data.token);
+        localStorage.setItem('userName', response.data.username); // Nota 'username' invece di 'userName'
+
         router.push('/dashboard'); // Removed await
       } else {
         setErrorMessage('Errore durante il login');
       }
     } catch (error) {
-      console.error('Errore durante il login:', error);
       setErrorMessage('Errore durante il login');
     }
   };
@@ -51,7 +40,6 @@ const Login: React.FC = () => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          {/* <label htmlFor="email">Email</label> */}
           <input
             type="email"
             id="email"
@@ -62,7 +50,6 @@ const Login: React.FC = () => {
           />
         </div>
         <div>
-          {/* <label htmlFor="password">Password</label> */}
           <input
             type="password"
             id="password"

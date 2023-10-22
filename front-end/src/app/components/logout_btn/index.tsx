@@ -7,27 +7,31 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4200';
 const LogoutButton = ({ onLogout }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setLoading(true);
 
-    fetch(`${API_URL}/auth/logout`, {
-      method: 'POST',
-    })
-      .then(response => {
-        if (response.ok) {
-          console.log('Logout effettuato con successo');
-          onLogout();
-          Router.push('/login');
-        } else {
-          console.log('Errore durante il logout');
-        }
-      })
-      .catch(error => {
-        console.log('Errore di rete: ', error);
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      const response = await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
       });
+
+      if (!response.ok) {
+        throw new Error('Errore durante il logout');
+      }
+
+      // Se la richiesta di logout ha avuto successo, pulisci le informazioni di autenticazione
+      localStorage.removeItem('jwtToken');
+      localStorage.removeItem('userName');
+
+      onLogout();
+
+      // Reindirizza l'utente alla pagina di login
+      Router.push('/');
+    } catch (error) {
+      console.error('Errore:', error.message || error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
