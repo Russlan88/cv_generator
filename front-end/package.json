@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"next dev\" \"cd ../back-end && nest start --watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -14,6 +14,7 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
+    "concurrently": "^8.2.2",
     "dotenv": "^16.3.1",
     "eslint": "^8.47.0",
     "eslint-config-next": "13.4.16",

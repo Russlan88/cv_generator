@@ -165,3 +165,14 @@ body
     
     &:hover::after
       width: 50px */
+.button{
+  &.type1{
+    border: 1px solid orange;
+background: transparent;
+color: orange;
+width: auto;
+height: fit-content;
+padding: 10px 15px;
+font-size: 20px;
+  }
+}
